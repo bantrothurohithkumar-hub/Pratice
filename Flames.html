@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FLAMES Calculator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f8bbd0, #e1f5fe);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 350px;
+        }
+        h1 { color: #d81b60; margin-bottom: 1.5rem; }
+        input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            outline: none;
+        }
+        input:focus { border-color: #d81b60; }
+        button {
+            background: #d81b60;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: 0.3s;
+        }
+        button:hover { background: #ad1457; }
+        #result {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🔥 FLAMES</h1>
+    <input type="text" id="name1" placeholder="Enter Name 1" autocomplete="off">
+    <input type="text" id="name2" placeholder="Enter Name 2" autocomplete="off">
+    <br>
+    <button onclick="calculateFlames()">Check Compatibility</button>
+    <div id="result"></div>
+</div>
+
+<script>
+    function calculateFlames() {
+        let name1 = document.getElementById('name1').value.toLowerCase().replace(/\s/g, '').split('');
+        let name2 = document.getElementById('name2').value.toLowerCase().replace(/\s/g, '').split('');
+
+        if (name1.length === 0 || name2.length === 0) {
+            document.getElementById('result').innerText = "Please enter both names!";
+            return;
+        }
+
+        // 1. Remove common characters
+        let n1 = [...name1];
+        let n2 = [...name2];
+
+        name1.forEach(char => {
+            if (n2.includes(char)) {
+                n1.splice(n1.indexOf(char), 1);
+                n2.splice(n2.indexOf(char), 1);
+            }
+        });
+
+        const count = n1.length + n2.length;
+        const flames = ["Friends", "Lovers", "Affection", "Marriage", "Enmity", "Siblings"];
+        
+        // 2. FLAMES logic
+        let flamesList = [...flames];
+        let startIndex = 0;
+
+        while (flamesList.length > 1) {
+            let evalIndex = (count + startIndex - 1) % flamesList.length;
+            flamesList.splice(evalIndex, 1);
+            startIndex = evalIndex;
+        }
+
+        const finalResult = flamesList[0];
+        const resultDiv = document.getElementById('result');
+        
+        // Add some personality to the output
+        const emojis = {
+            "Friends": "🤝", "Lovers": "❤️", "Affection": "😍", 
+            "Marriage": "💍", "Enmity": "💢", "Siblings": "👶"
+        };
+
+        resultDiv.innerHTML = `Result: <span style="color:#d81b60">${finalResult} ${emojis[finalResult]}</span>`;
+    }
+</script>
+
+</body>
+</html>
